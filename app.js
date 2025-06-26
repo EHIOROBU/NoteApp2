@@ -4,6 +4,7 @@ const mongodb = require("mongodb")
 const CookieParser = require("cookie-parser")
 const authRoute = require("./routers/route")
 
+
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
