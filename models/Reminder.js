@@ -28,5 +28,5 @@ const remindMeSchema = mongoose.Schema({
         default: true
     }
 })
-const Remind = mongoose.model('remind', remindMeSchema)
-module.exports = Remind;
+const Reminder = mongoose.model('remind', remindMeSchema)
+module.exports = Reminder;
