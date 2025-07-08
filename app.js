@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const mongodb = require("mongodb")
 const CookieParser = require("cookie-parser")
 const authRoute = require("./routers/route")
+const authenticate = require("./middleware/authenticate")
 
 
 const app = express()
@@ -22,3 +23,4 @@ mongoose.connect(process.env.URI)
         console.log(error)
     })
 app.use(authRoute);
+app.use(authenticate);

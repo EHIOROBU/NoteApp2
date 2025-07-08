@@ -4,11 +4,6 @@ const Reminder = require("../models/Reminder")
 
 const createReminder = async (req, res) => {
     try {
-        const token = req.header("Authorization").replace("Bearer ", "")
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        userId = decoded._id
-        console.log(decoded)
-
         const reminder = new Reminder({
             userId,
             noteId: req.body.noteId,
@@ -24,12 +19,8 @@ const createReminder = async (req, res) => {
 }
 const fetchReminder = async (req, res)=>{
 try {
-    const token = req.header("Authorization").replace("Bearer ", "")
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    userId = decoded._id
-
-    const getreminder = await Reminder.find({userId})
-    res.status(200).json(getreminder)
+    const getReminder = await Reminder.find({})
+    res.status(200).json(getReminder)
 
 } catch (error) {
     res.send(error.message)

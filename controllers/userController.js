@@ -33,11 +33,20 @@ const accessUser = async (req, res) => {
 }
 const getUser = async (req, res) => {
     try {
-        const user = await User.findOne({})
+        const user = await User.find({})
         res.status(200).json(user)
     } catch (error) {
         console.log(error)
     }
+}
+const getUserById = async(req, res)=>{
+try {
+    const {id} = req.params
+    const getId = await Note.findById(id)
+    res.status(200).json(getId)
+} catch (error) {
+    console.log(error)
+}
 }
 
 
@@ -45,5 +54,6 @@ const getUser = async (req, res) => {
 module.exports = {
     CreateUser,
     getUser,
-    accessUser
+    accessUser,
+    getUserById
 };
