@@ -9,7 +9,7 @@ const { createReminder, fetchReminder } = require("../controllers/reminderContro
 router.get("/", getUser)
 router.post("/register", CreateUser)
 router.post("/login", accessUser)
-router.get("/", getUserById)
+router.get("/:id", getUserById)
 //note route endpoints
 router.post("/note", authenticate, createNote)
 router.put("/note/:id", authenticate, updateNote)
