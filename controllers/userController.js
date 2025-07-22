@@ -39,14 +39,14 @@ const getUser = async (req, res) => {
         console.log(error)
     }
 }
-const getUserById = async(req, res)=>{
-try {
-    const {id} = req.params
-    const getId = await Note.findById(id)
-    res.status(200).json(getId)
-} catch (error) {
-    console.log(error)
-}
+const getUserById = async (req, res) => {
+    try {
+        const { id } = req.params
+        const getId = await User.findById(id)
+        res.status(200).json(getId)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 

@@ -1,9 +1,8 @@
-const jwt = require("jsonwebtoken")
 const Reminder = require("../models/Reminder")
-
 
 const createReminder = async (req, res) => {
     try {
+        const userId = req.user._id;
         const reminder = new Reminder({
             userId,
             noteId: req.body.noteId,
@@ -17,14 +16,13 @@ const createReminder = async (req, res) => {
         res.send(error.message)
     }
 }
-const fetchReminder = async (req, res)=>{
-try {
-    const getReminder = await Reminder.find({})
-    res.status(200).json(getReminder)
-
-} catch (error) {
-    res.send(error.message)
-}
+const fetchReminder = async (req, res) => {
+    try {
+        const getReminders = await Reminder.find({userId: req.decoded._id})
+        return res.status(200).json(getReminders) 
+    } catch (error) {
+        return res.send(error.message)
+    }
 }
 
 module.exports = {

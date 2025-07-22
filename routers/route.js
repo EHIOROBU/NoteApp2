@@ -12,13 +12,13 @@ router.post("/login", accessUser)
 router.get("/:id", getUserById)
 //note route endpoints
 router.post("/note", authenticate, createNote)
-router.put("/note/:id", authenticate, updateNote)
+router.patch("/note/:id", authenticate, updateNote)
 router.delete("/note/:id", authenticate, deleteNote)
-router.get("/note", getNote)
+router.get("/notes", getNote)
 router.get("/note/:id", getNoteById)
 //reminder route endpoints
-router.get("/reminder", fetchReminder)
 router.post("/reminder", authenticate, createReminder)
+router.get("/reminder", authenticate, fetchReminder)
 
 
 module.exports = router;
