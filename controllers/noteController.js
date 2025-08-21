@@ -36,15 +36,18 @@ const getNote = async (req, res) => {
         const pageNum = parseInt(page) || 1
         const limitNum = parseInt(limit) || 5
         const skip = (pageNum - 1) * limitNum
+        console.log(Note)
         const totalNote = await Note.countDocuments(filter)
-        console.log(note)
-        const note = await Note.find(filter).skip(skip).limit(limitNum)
+        console.log(Note)
+        const notes = await Note.find({ userId: req.user._id, ...filter }).skip(skip).limit(limitNum)
+        console.log(notes)
         res.status(200).json({
-            totalNote, note, totalPage: Math.ceil(totalNote / limitNum),
+            totalNote, notes, totalPage: Math.ceil(totalNote / limitNum),
             currentPage: pageNum
         }
         )
     } catch (error) {
+        console.log(error)
         return res.status(404).send(error.message)
     }
 }
@@ -59,23 +62,24 @@ const createNote = async (req, res) => {
         await note.save()
         res.send(note)
     } catch (error) {
-        res.status(404).send(error.message)
+        return res.status(404).send(error.message)
 
     }
 }
 const updateNote = async (req, res) => {
     try {
-        const noteId = req.params.noteId;
-        const userId = req.user._id;
-        const updates = req.body;
-        const note = await Note.findOneAndUpdate({ _id: noteId, userId }, updates, { new: true });
-        console.log(note)
+        const { id } = req.params
+        const userid = req.body._id
+        console.log(Note)
+        const note = await Note.findByIdAndUpdate(id, req.body._id);
         if (!note) {
             return res.status(404).json({ message: "note note found or you do not have permission to update note" })
         }
         res.send(note)
+        const updatingNote = await Note.findById(id)
+        res.send(updatingNote)
     } catch (error) {
-        res.status(404).send(error.message)
+        return res.status(404).send(error.message)
     }
 }
 const deleteNote = async (req, res) => {
@@ -91,16 +95,17 @@ const deleteNote = async (req, res) => {
         res.status(200).json(deleting)
 
     } catch (error) {
-        res.status(404).send(error.message)
+        return res.status(404).send(error.message)
     }
 }
+
 const getNoteById = async (req, res) => {
     try {
         const { id } = req.params
         const getId = await Note.findById(id)
         res.status(200).json(getId)
     } catch (error) {
-        console.log(error)
+        return res.status(404).send(error.message)
     }
 }
 module.exports = {
@@ -108,5 +113,5 @@ module.exports = {
     updateNote,
     deleteNote,
     getNote,
-    getNoteById
+    getNoteById,
 }

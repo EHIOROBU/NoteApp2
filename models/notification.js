@@ -1,16 +1,16 @@
 const mongoose = require("mongoose")
-const Reminder = require("./Reminder")
-const { required } = require("joi")
 
-const notificationSchema = mongoose.Schema({
+const notificationSchema = new mongoose.Schema({
 
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+          ref: "User"
     },
     Reminder_id: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+          ref: "Reminder"
     },
     sent_at: {
         type: Date,
@@ -18,8 +18,10 @@ const notificationSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        required: true
+        required: true,
+        enum: ['sent', 'read', 'dismissed']
     }
 })
-const Notification = mongoose.Model('notificationSchema', notificationSchema)
+const Notification = mongoose.model('notification', notificationSchema)
+
 module.exports = Notification

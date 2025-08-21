@@ -36,7 +36,7 @@ const getUser = async (req, res) => {
         const user = await User.find({})
         res.status(200).json(user)
     } catch (error) {
-        console.log(error)
+        return res.status(404).send(error.message)
     }
 }
 const getUserById = async (req, res) => {
@@ -45,7 +45,7 @@ const getUserById = async (req, res) => {
         const getId = await User.findById(id)
         res.status(200).json(getId)
     } catch (error) {
-        console.log(error)
+        return res.status(404).send(error.message)
     }
 }
 

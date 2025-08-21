@@ -1,5 +1,16 @@
 const Reminder = require("../models/Reminder")
 
+const fetchReminder = async (req, res) => {
+    console.log(fetchReminder)
+    try {
+        const reminders = await Reminder.find({ userId: req.user._id })
+        return res.json(reminders)
+    } catch (error) {
+         return res.send(error.message)
+        // console.log(error)
+    }
+}
+
 const createReminder = async (req, res) => {
     try {
         const userId = req.user._id;
@@ -12,14 +23,6 @@ const createReminder = async (req, res) => {
         console.log(reminder)
         await reminder.save()
         res.send(reminder)
-    } catch (error) {
-        res.send(error.message)
-    }
-}
-const fetchReminder = async (req, res) => {
-    try {
-        const getReminders = await Reminder.find({userId: req.decoded._id})
-        return res.status(200).json(getReminders) 
     } catch (error) {
         return res.send(error.message)
     }
