@@ -1,5 +1,4 @@
-const mongoose = require("mongoose")
-
+const mongoose = require("mongoose");
 
 const remindMeSchema = mongoose.Schema({
     userId: {
@@ -8,7 +7,7 @@ const remindMeSchema = mongoose.Schema({
         ref: "User"
     },
     noteId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "Note"
     },
@@ -18,15 +17,15 @@ const remindMeSchema = mongoose.Schema({
     },
     repeat_interval: {
         type: String,
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
+        enum: ["daily", "weekly", "monthly"] // Add validation for repeat interval
     },
     is_active: {
         type: Boolean,
         default: true
     }
-})
-const Reminder = mongoose.model('reminder', remindMeSchema)
+}, {
+    timestamps: true // Automatically handle createdAt and updatedAt fields
+});
+
+const Reminder = mongoose.model('Reminder', remindMeSchema);
 module.exports = Reminder;

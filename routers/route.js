@@ -5,7 +5,7 @@ const router = express.Router()
 const { getUser, CreateUser, accessUser, getUserById } = require("../controllers/userController");
 const { createNote, updateNote, deleteNote, getNote, getNoteById } = require("../controllers/noteController")
 const { createReminder, fetchReminder } = require("../controllers/reminderController")
-const { createNotication, sendNotification } = require("../controllers/notificationController")
+const { createNotification, sendNotification } = require("../controllers/notificationController")
 
 // //users route endpoint
 router.post("/register", CreateUser)
@@ -24,7 +24,7 @@ router.delete("/notes/:id", authenticate, deleteNote)
 router.get("/reminders", authenticate, fetchReminder)
 router.post("/reminders", authenticate, createReminder)
 //notification route endpoint
-router.post("/notifcations", authenticate, createNotication)
+router.post("/notifcations", authenticate, createNotification)
 router.post("/notifications", authenticate, sendNotification)
 
 module.exports = router;

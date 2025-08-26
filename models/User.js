@@ -1,40 +1,41 @@
-const bcrypt = require("bcrypt")
-const mongoose = require("mongoose")
-
+const bcrypt = require("bcrypt");
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, "username is required"]
+        required: [true, "Username is required"]
     },
     email: {
         type: String,
-        unique: [true, "email already existed in database"],
-        required: [true, "email is required"],
+        unique: [true, "Email already existed in database"],
+        required: [true, "Email is required"],
         validate: [(value) => {
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             return emailRegex.test(value);
-        }, "use valid email"]
+        }, "Use valid email"]
     },
     password: {
         type: String,
-        required: [true, "password is required"],
-        minlength: [8, "use minimum of 8 password characters"]
-    },
-    created_at: {
-        type: Date,
-        default: Date.now
-    },
-    updated_at: {
-        type: Date,
-        default: Date.now
+        required: [true, "Password is required"],
+        minlength: [8, "Use minimum of 8 password characters"]
     }
-})
-userSchema.pre("save", async function (next) {
-    const salt = await bcrypt.genSalt()
-    this.password = await bcrypt.hash(this.password, salt)
-    next()
-})
+}, {
+    timestamps: true
+});
 
-const User = mongoose.model("user", userSchema)
-module.exports = { User }
+userSchema.pre("save", async function(next) {
+    try {
+        if (!this.isModified("password")) {
+            return next();
+        }
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
+
+const User = mongoose.model("User", userSchema);
+module.exports = { User };
