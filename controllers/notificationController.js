@@ -9,24 +9,22 @@ const createNotification = async (req, res) => {
             status
         });
         await notify.save();
-        res.status(201).json(notify);
-    } catch (error) {
-        res.status(400).send(error.message);
-    }
-};
-
-const sendNotification = async (userId, reminderId) => {
-    try {
-        const notification = new Notification({
-            userId,
-            reminderId,
-            status: "sent"
+        return res.status(200).json({
+            success: true,
+            message: "Notification successfully created",
+            data: notify
         });
-        await notification.save();
-        return notification;
     } catch (error) {
-        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+            error: {
+                code: "INTERNAL_SERVER_ERROR",
+                details: error.message,
+            }
+        });
     }
 };
 
-module.exports = { createNotification, sendNotification };
+
+module.exports = { createNotification };

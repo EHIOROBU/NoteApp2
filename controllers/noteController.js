@@ -28,14 +28,25 @@ const getNote = async (req, res) => {
         const totalNote = await Note.countDocuments(filter);
         const notes = await Note.find(filter).skip(skip).limit(limitNum);
 
-        res.status(200).json({
-            totalNote,
-            notes,
-            totalPage: Math.ceil(totalNote / limitNum),
-            currentPage: pageNum
+        return res.status(200).json({
+            success: true,
+            messsage: "successfully",
+            data: {
+                totalNote,
+                notes,
+                totalPage: Math.ceil(totalNote / limitNum),
+                currentPage: pageNum
+            }
         });
     } catch (error) {
-        return res.status(404).send(error.message);
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+            error: {
+                code: "INTERNAL_SERVER_ERROR",
+                details: error.message,
+            }
+        });
     }
 };
 const createNote = async (req, res) => {
@@ -48,9 +59,20 @@ const createNote = async (req, res) => {
             tags: req.body.tags
         });
         await note.save();
-        res.send(note);
+        return res.json({
+            success: true,
+            message: "successfully created",
+            data: note
+        });
     } catch (error) {
-        return res.status(404).send(error.message);
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+            error: {
+                code: "INTERNAL_SERVER_ERROR",
+                details: error.message,
+            }
+        });
     }
 };
 const updateNote = async (req, res) => {
@@ -58,11 +80,29 @@ const updateNote = async (req, res) => {
         const { id } = req.params;
         const note = await Note.findByIdAndUpdate(id, req.body, { new: true });
         if (!note) {
-            return res.status(404).json({ message: "Note not found or you do not have permission to update note" });
+            return res.status(404).json({
+                success: false,
+                message: "Note not found or you do not have permission to update note",
+                error: {
+                    code: "NOTE_UNAVAILABLE_OR_NO_UPDATE_PERMISSION",
+                    details: "Note not found or you do not have permission to update note"
+                }
+            });
         }
-        res.send(note);
+        res.json({
+            success: true,
+            message: "successfully updated",
+            data: note
+        });
     } catch (error) {
-        return res.status(404).send(error.message);
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+            error: {
+                code: "INTERNAL_SERVER_ERROR",
+                details: error.message,
+            }
+        });
     }
 };
 const deleteNote = async (req, res) => {
@@ -70,11 +110,28 @@ const deleteNote = async (req, res) => {
         const { id } = req.params;
         const note = await Note.findByIdAndDelete(id);
         if (!note) {
-            return res.status(404).send("Note not found");
+            return res.status(404).json({
+                success: false,
+                message: "Note not found or you do not have permission to Delete note",
+                error: {
+                    code: "NOTE_UNAVAILABLE_OR_NO_DELETE_PERMISSION",
+                    details: "Note not found or you do not have permission to delete note"
+                }
+            });
         }
-        res.status(200).json({ message: "Note deleted successfully" });
+        res.status(200).json({
+            success: true,
+            message: "Note deleted successfully",
+        });
     } catch (error) {
-        return res.status(404).send(error.message);
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+            error: {
+                code: "INTERNAL_SERVER_ERROR",
+                details: error.message,
+            }
+        });
     }
 };
 const getNoteById = async (req, res) => {
@@ -82,11 +139,29 @@ const getNoteById = async (req, res) => {
         const { id } = req.params;
         const getId = await Note.findById(id);
         if (!getId) {
-            return res.status(404).send("Note not found");
+            return res.status(404).json({
+                success: false,
+                message: "Note not found",
+                error: {
+                    code: "NOTE_UNAVAILABLE",
+                    details: "Note not found"
+                }
+            });
         }
-        res.status(200).json(getId);
+        res.status(200).json({
+            success: true,
+            message: "Note successfully fetched ById",
+            data: getId
+        });
     } catch (error) {
-        return res.status(404).send(error.message);
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+            error: {
+                code: "INTERNAL_SERVER_ERROR",
+                details: error.message,
+            }
+        });
     }
 };
 module.exports = {

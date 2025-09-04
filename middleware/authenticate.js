@@ -14,8 +14,15 @@ const authenticate = async (req, res, next) => {
         req.token = token;
         req.user = user;
         next();
-    } catch (error) {
-        return res.status(401).send({ message: "Please Authenticate" });
+      } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "PLEASE AUTHENTICATE",
+            error: {
+                code: "Authentication Error",
+                details: "PLEASE AUTHENTICATE",
+            }
+        });
     }
-}
+};
 module.exports = authenticate;
