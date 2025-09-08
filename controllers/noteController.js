@@ -30,7 +30,7 @@ const getNote = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            messsage: "successfully",
+            messsage: "successfully fetched note",
             data: {
                 totalNote,
                 notes,
