@@ -1,4 +1,4 @@
-const Notification = require("../models/notification");
+const Notification = require("../models/Notification");
 
 const createNotification = async (req, res) => {
     try {
@@ -9,7 +9,7 @@ const createNotification = async (req, res) => {
             status
         });
         await notify.save();
-        return res.status(200).json({
+        return res.status(201).json({
             success: true,
             message: "Notification successfully created",
             data: notify

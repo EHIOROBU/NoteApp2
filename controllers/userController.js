@@ -9,7 +9,7 @@ const CreateUser = async (req, res) => {
         if (error) return res.status(400).send(error.details[0].message);
         const user = new User(req.body);
         await user.save();
-        return res.status(200).json({
+        return res.status(201).json({
             success: true,
             message: "user successfully created",
             data: user
@@ -33,28 +33,28 @@ const accessUser = async (req, res) => {
 
         const user = await User.findOne({ email: req.body.email });
         if (!user)
-            return res.status(404).json({
+            return res.status(400).json({
                 success: false,
-                message: "Invalid Email or Password",
+                message: "Invalid Email",
                 error: {
-                    code: "PASSWORD_OR_EMAIL_INCORRECT_OR_DOESNOT_EXIST",
-                    details: "Invalid Email or Password"
+                    code: "EMAIL_INCORRECT_OR_DOESNOT_EXIST",
+                    details: "Invalid Email"
                 }
             });
 
         const isValidPassword = await bcrypt.compare(req.body.password, user.password);
         if (!isValidPassword)
-            return res.status(404).json({
+            return res.status(400).json({
                 success: false,
-                message: "Invalid Email or Password",
+                message: "Invalid Password",
                 error: {
-                    code: "PASSWORD_OR_EMAIL_INCORRECT_OR_DOESNOT_EXIST",
-                    details: "Invalid Email or Password"
+                    code: "PASSWORD_INCORRECT_OR_DOESNOT_EXIST",
+                    details: "Invalid Password"
                 }
             });;
 
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "3h" });
-        return res.send({
+        return res.status(200).send({
             success: true,
             message: "Successfully logged in",
             data: {
@@ -97,7 +97,7 @@ const getUserById = async (req, res) => {
         const { id } = req.params;
         const user = await User.findById(id);
         if (!user)
-            return res.status(400).json({
+            return res.status(404).json({
                 success: false,
                 message: "user not found",
                 error: {

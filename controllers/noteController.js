@@ -59,9 +59,9 @@ const createNote = async (req, res) => {
             tags: req.body.tags
         });
         await note.save();
-        return res.json({
+        return res.status(201).json({
             success: true,
-            message: "successfully created",
+            message: "successfully created Note",
             data: note
         });
     } catch (error) {
@@ -89,9 +89,9 @@ const updateNote = async (req, res) => {
                 }
             });
         }
-        res.json({
+        res.status(200).json({
             success: true,
-            message: "successfully updated",
+            message: "successfully updated Note",
             data: note
         });
     } catch (error) {
